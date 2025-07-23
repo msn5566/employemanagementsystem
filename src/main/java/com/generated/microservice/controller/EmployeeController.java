@@ -21,60 +21,50 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @PostMapping
-    @Operation(summary = "Add a new employee")
+    @GetMapping("/search")
+    @Operation(summary = "Search employees by name")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Employee created"),
-            @ApiResponse(responseCode = "400", description = "Invalid input")
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved employees"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee employee) {
-        Employee savedEmployee = employeeService.addEmployee(employee);
-        return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Get employee by id")
-     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Employee found"),
-            @ApiResponse(responseCode = "404", description = "Employee not found")
-    })
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable String id) {
-        Optional<Employee> employee = employeeService.getEmployeeById(id);
-        return employee.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<Employee>> getEmployeesByName(@RequestParam String name) {
+        List<Employee> employees = employeeService.findByName(name);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
     @GetMapping
     @Operation(summary = "Get all employees")
-    @ApiResponse(responseCode = "200", description = "Employees found")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> employees = employeeService.getAllEmployees();
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get employee by id")
+    public ResponseEntity<Optional<Employee>> getEmployeeById(@PathVariable String id) {
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
+    }
+
+    @PostMapping
+    @Operation(summary = "Create a new employee")
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
+        Employee createdEmployee = employeeService.createEmployee(employee);
+        return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-     @Operation(summary = "Update an existing employee")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Employee updated"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "404", description = "Employee not found")
-    })
-    public ResponseEntity<Employee> updateEmployee(@PathVariable String id, @Valid @RequestBody Employee employee) {
-         try {
-            Employee updatedEmployee = employeeService.updateEmployee(id, employee);
-            return ResponseEntity.ok(updatedEmployee);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Update an existing employee")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable String id, @Valid @RequestBody Employee employeeDetails) {
+        Employee updatedEmployee = employeeService.updateEmployee(id, employeeDetails);
+        return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an employee")
-     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Employee deleted"),
-            @ApiResponse(responseCode = "404", description = "Employee not found")
-    })
-    public ResponseEntity<Void> deleteEmployee(@PathVariable String id) {
+    public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable String id) {
         employeeService.deleteEmployee(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

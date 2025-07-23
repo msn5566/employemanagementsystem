@@ -4,7 +4,7 @@ import com.generated.microservice.entity.Employee;
 import com.generated.microservice.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -14,26 +14,31 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public Employee addEmployee(@Valid Employee employee) {
-        return employeeRepository.save(employee);
-    }
-
-    public Optional<Employee> getEmployeeById(String id) {
-        return employeeRepository.findById(id);
+    public List<Employee> findByName(String name) {
+        return employeeRepository.findByName(name);
     }
 
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
-     public Employee updateEmployee(String id, @Valid Employee updatedEmployee) {
-        Employee existingEmployee = employeeRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + id));
+    public Optional<Employee> getEmployeeById(String id) {
+        return employeeRepository.findById(id);
+    }
 
-        existingEmployee.setName(updatedEmployee.getName());
-        existingEmployee.setContactInformation(updatedEmployee.getContactInformation());
+    public Employee createEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
 
-        return employeeRepository.save(existingEmployee);
+    public Employee updateEmployee(String id, Employee employeeDetails) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+
+        employee.setName(employeeDetails.getName());
+        employee.setDepartment(employeeDetails.getDepartment());
+        employee.setEmail(employeeDetails.getEmail());
+
+        return employeeRepository.save(employee);
     }
 
     public void deleteEmployee(String id) {

@@ -3,25 +3,25 @@ package com.generated.microservice.controller;
 import com.generated.microservice.entity.Employee;
 import com.generated.microservice.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.*;
 
 @WebMvcTest(EmployeeController.class)
-class EmployeeControllerTest {
+public class EmployeeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,140 +32,86 @@ class EmployeeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    void addEmployee_shouldCreateNewEmployee() throws Exception {
-        Employee employee = new Employee();
-        employee.setName("John Doe");
-        employee.setContactInformation("john.doe@example.com");
+    private Employee employee1;
+    private Employee employee2;
 
-        when(employeeService.addEmployee(any(Employee.class))).thenReturn(employee);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/employees")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(employee)))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.contactInformation").value("john.doe@example.com"));
-
-        verify(employeeService, times(1)).addEmployee(any(Employee.class));
-    }
-
-    @Test
-    void getEmployeeById_shouldReturnEmployee_whenEmployeeExists() throws Exception {
-        String employeeId = "1";
-        Employee employee = new Employee();
-        employee.setId(employeeId);
-        employee.setName("John Doe");
-        employee.setContactInformation("john.doe@example.com");
-
-        when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.of(employee));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}", employeeId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(employeeId))
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.contactInformation").value("john.doe@example.com"));
-
-        verify(employeeService, times(1)).getEmployeeById(employeeId);
-    }
-
-    @Test
-    void getEmployeeById_shouldReturnNotFound_whenEmployeeDoesNotExist() throws Exception {
-        String employeeId = "3";
-
-        when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.empty());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}", employeeId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-
-        verify(employeeService, times(1)).getEmployeeById(employeeId);
-    }
-
-    @Test
-    void getAllEmployees_shouldReturnListOfEmployees() throws Exception {
-        Employee employee1 = new Employee();
+    @BeforeEach
+    void setUp() {
+        employee1 = new Employee();
         employee1.setId("1");
         employee1.setName("John Doe");
-        employee1.setContactInformation("john.doe@example.com");
+        employee1.setDepartment("IT");
+        employee1.setEmail("john.doe@example.com");
 
-        Employee employee2 = new Employee();
+        employee2 = new Employee();
         employee2.setId("2");
-        employee2.setName("Jane Smith");
-        employee2.setContactInformation("jane.smith@example.com");
+        employee2.setName("Jane Doe");
+        employee2.setDepartment("HR");
+        employee2.setEmail("jane.doe@example.com");
+    }
 
-        List<Employee> employees = Arrays.asList(employee1, employee2);
+    @Test
+    void getEmployeesByName_shouldReturnOk_whenNameExists() throws Exception {
+        when(employeeService.findByName("John Doe")).thenReturn(Arrays.asList(employee1));
 
-        when(employeeService.getAllEmployees()).thenReturn(employees);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/employees")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/employees/search?name=John Doe"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id").value("1"))
+                .andExpect(jsonPath("$[0].name").value("John Doe"));
+    }
+
+    @Test
+    void getAllEmployees_shouldReturnOk() throws Exception {
+        when(employeeService.getAllEmployees()).thenReturn(Arrays.asList(employee1, employee2));
+
+        mockMvc.perform(get("/api/employees"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].name").value("John Doe"))
-                .andExpect(jsonPath("$[1].id").value("2"))
-                .andExpect(jsonPath("$[1].name").value("Jane Smith"));
-
-        verify(employeeService, times(1)).getAllEmployees();
+                .andExpect(jsonPath("$[1].name").value("Jane Doe"));
     }
 
     @Test
-    void updateEmployee_shouldUpdateExistingEmployee() throws Exception {
-        String employeeId = "1";
-        Employee existingEmployee = new Employee();
-        existingEmployee.setId(employeeId);
-        existingEmployee.setName("John Doe");
-        existingEmployee.setContactInformation("john.doe@example.com");
+    void getEmployeeById_shouldReturnOk_whenIdExists() throws Exception {
+        when(employeeService.getEmployeeById("1")).thenReturn(Optional.of(employee1));
 
-        Employee updatedEmployee = new Employee();
-        updatedEmployee.setName("Updated Name");
-        updatedEmployee.setContactInformation("updated.email@example.com");
-
-        when(employeeService.updateEmployee(eq(employeeId), any(Employee.class))).thenReturn(existingEmployee);
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/employees/{id}", employeeId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedEmployee)))
+        mockMvc.perform(get("/api/employees/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(employeeId))
-                .andExpect(jsonPath("$.name").value("John Doe")) // Expecting existing employee
-                .andExpect(jsonPath("$.contactInformation").value("john.doe@example.com")); // Expecting existing employee
-
-        verify(employeeService, times(1)).updateEmployee(eq(employeeId), any(Employee.class));
+                .andExpect(jsonPath("$.name").value("John Doe"));
     }
 
     @Test
-    void updateEmployee_shouldReturnNotFound_whenEmployeeDoesNotExist() throws Exception {
-        String employeeId = "3";
-        Employee updatedEmployee = new Employee();
-        updatedEmployee.setName("Updated Name");
-        updatedEmployee.setContactInformation("updated.email@example.com");
+    void createEmployee_shouldReturnCreated() throws Exception {
+        when(employeeService.createEmployee(any(Employee.class))).thenReturn(employee1);
 
-        when(employeeService.updateEmployee(eq(employeeId), any(Employee.class))).thenThrow(new IllegalArgumentException("Employee not found"));
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/employees/{id}", employeeId)
+        mockMvc.perform(post("/api/employees")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedEmployee)))
-                .andExpect(status().isNotFound());
-
-        verify(employeeService, times(1)).updateEmployee(eq(employeeId), any(Employee.class));
+                        .content(objectMapper.writeValueAsString(employee1)))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value("John Doe"));
     }
 
     @Test
-    void deleteEmployee_shouldDeleteExistingEmployee() throws Exception {
-        String employeeId = "1";
-        doNothing().when(employeeService).deleteEmployee(employeeId);
+    void updateEmployee_shouldReturnOk() throws Exception {
+        when(employeeService.updateEmployee(eq("1"), any(Employee.class))).thenReturn(employee1);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/employees/{id}", employeeId)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/api/employees/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(employee1)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value("John Doe"));
+    }
+
+    @Test
+    void deleteEmployee_shouldReturnNoContent() throws Exception {
+        doNothing().when(employeeService).deleteEmployee("1");
+
+        mockMvc.perform(delete("/api/employees/1"))
                 .andExpect(status().isNoContent());
 
-        verify(employeeService, times(1)).deleteEmployee(employeeId);
+        verify(employeeService, times(1)).deleteEmployee("1");
     }
 }

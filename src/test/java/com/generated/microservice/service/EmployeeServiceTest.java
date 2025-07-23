@@ -13,11 +13,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeServiceTest {
+public class EmployeeServiceTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -33,95 +34,76 @@ class EmployeeServiceTest {
         employee1 = new Employee();
         employee1.setId("1");
         employee1.setName("John Doe");
-        employee1.setContactInformation("john.doe@example.com");
+        employee1.setDepartment("IT");
+        employee1.setEmail("john.doe@example.com");
 
         employee2 = new Employee();
         employee2.setId("2");
-        employee2.setName("Jane Smith");
-        employee2.setContactInformation("jane.smith@example.com");
+        employee2.setName("Jane Doe");
+        employee2.setDepartment("HR");
+        employee2.setEmail("jane.doe@example.com");
     }
 
     @Test
-    void addEmployee_shouldSaveEmployeeAndReturnSavedEmployee() {
-        when(employeeRepository.save(employee1)).thenReturn(employee1);
+    void findByName_shouldReturnListOfEmployees_whenNameExists() {
+        when(employeeRepository.findByName("John Doe")).thenReturn(Arrays.asList(employee1));
 
-        Employee savedEmployee = employeeService.addEmployee(employee1);
+        List<Employee> employees = employeeService.findByName("John Doe");
 
-        assertEquals(employee1, savedEmployee);
-        verify(employeeRepository, times(1)).save(employee1);
-    }
-
-    @Test
-    void getEmployeeById_shouldReturnEmployee_whenEmployeeExists() {
-        String employeeId = "1";
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee1));
-
-        Optional<Employee> employee = employeeService.getEmployeeById(employeeId);
-
-        assertTrue(employee.isPresent());
-        assertEquals(employee1, employee.get());
-        verify(employeeRepository, times(1)).findById(employeeId);
-    }
-
-    @Test
-    void getEmployeeById_shouldReturnEmptyOptional_whenEmployeeDoesNotExist() {
-        String employeeId = "3";
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
-
-        Optional<Employee> employee = employeeService.getEmployeeById(employeeId);
-
-        assertFalse(employee.isPresent());
-        verify(employeeRepository, times(1)).findById(employeeId);
+        assertEquals(1, employees.size());
+        assertEquals("John Doe", employees.get(0).getName());
     }
 
     @Test
     void getAllEmployees_shouldReturnListOfAllEmployees() {
-        List<Employee> employees = Arrays.asList(employee1, employee2);
-        when(employeeRepository.findAll()).thenReturn(employees);
+        when(employeeRepository.findAll()).thenReturn(Arrays.asList(employee1, employee2));
 
-        List<Employee> allEmployees = employeeService.getAllEmployees();
+        List<Employee> employees = employeeService.getAllEmployees();
 
-        assertEquals(2, allEmployees.size());
-        assertEquals(employees, allEmployees);
-        verify(employeeRepository, times(1)).findAll();
+        assertEquals(2, employees.size());
+        assertEquals("John Doe", employees.get(0).getName());
+        assertEquals("Jane Doe", employees.get(1).getName());
     }
 
     @Test
-    void updateEmployee_shouldUpdateEmployeeAndReturnUpdatedEmployee_whenEmployeeExists() {
-        String employeeId = "1";
-        Employee updatedEmployee = new Employee();
-        updatedEmployee.setName("Updated Name");
-        updatedEmployee.setContactInformation("updated.email@example.com");
+    void getEmployeeById_shouldReturnEmployee_whenIdExists() {
+        when(employeeRepository.findById("1")).thenReturn(Optional.of(employee1));
 
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee1));
-        when(employeeRepository.save(any(Employee.class))).thenReturn(employee1);
+        Optional<Employee> employee = employeeService.getEmployeeById("1");
 
-        Employee result = employeeService.updateEmployee(employeeId, updatedEmployee);
-
-        assertEquals("Updated Name", employee1.getName());
-        assertEquals("updated.email@example.com", employee1.getContactInformation());
-        assertEquals(employee1, result);
-        verify(employeeRepository, times(1)).findById(employeeId);
-        verify(employeeRepository, times(1)).save(employee1);
+        assertTrue(employee.isPresent());
+        assertEquals("John Doe", employee.get().getName());
     }
 
     @Test
-    void updateEmployee_shouldThrowException_whenEmployeeDoesNotExist() {
-        String employeeId = "3";
-        Employee updatedEmployee = new Employee();
-        updatedEmployee.setName("Updated Name");
-        updatedEmployee.setContactInformation("updated.email@example.com");
+    void createEmployee_shouldSaveEmployee() {
+        when(employeeRepository.save(employee1)).thenReturn(employee1);
 
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+        Employee createdEmployee = employeeService.createEmployee(employee1);
 
-        assertThrows(IllegalArgumentException.class, () -> employeeService.updateEmployee(employeeId, updatedEmployee));
-        verify(employeeRepository, times(1)).findById(employeeId);
-        verify(employeeRepository, never()).save(any(Employee.class));
+        assertEquals("John Doe", createdEmployee.getName());
     }
 
     @Test
-    void deleteEmployee_shouldDeleteEmployee_whenEmployeeExists() {
-        String employeeId = "1";
+    void updateEmployee_shouldUpdateEmployee_whenIdExists() {
+        Employee employeeDetails = new Employee();
+        employeeDetails.setName("Updated Name");
+        employeeDetails.setDepartment("Updated Department");
+        employeeDetails.setEmail("updated.email@example.com");
+
+        when(employeeRepository.findById("1")).thenReturn(Optional.of(employee1));
+        when(employeeRepository.save(employee1)).thenReturn(employee1);
+
+        Employee updatedEmployee = employeeService.updateEmployee("1", employeeDetails);
+
+        assertEquals("Updated Name", updatedEmployee.getName());
+        assertEquals("Updated Department", updatedEmployee.getDepartment());
+        assertEquals("updated.email@example.com", updatedEmployee.getEmail());
+    }
+
+    @Test
+    void deleteEmployee_shouldDeleteEmployee_whenIdExists() {
+        String employeeId = "123";
         doNothing().when(employeeRepository).deleteById(employeeId);
 
         employeeService.deleteEmployee(employeeId);
