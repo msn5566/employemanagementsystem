@@ -36,7 +36,6 @@ class EmployeeControllerTest {
     void addEmployee_shouldCreateNewEmployee() throws Exception {
         Employee employee = new Employee();
         employee.setName("John Doe");
-        employee.setContactInformation("john.doe@example.com");
 
         when(employeeService.addEmployee(any(Employee.class))).thenReturn(employee);
 
@@ -45,8 +44,7 @@ class EmployeeControllerTest {
                         .content(objectMapper.writeValueAsString(employee)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.contactInformation").value("john.doe@example.com"));
+                .andExpect(jsonPath("$.name").value("John Doe"));
 
         verify(employeeService, times(1)).addEmployee(any(Employee.class));
     }
@@ -57,7 +55,6 @@ class EmployeeControllerTest {
         Employee employee = new Employee();
         employee.setId(employeeId);
         employee.setName("John Doe");
-        employee.setContactInformation("john.doe@example.com");
 
         when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.of(employee));
 
@@ -66,8 +63,7 @@ class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(employeeId))
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.contactInformation").value("john.doe@example.com"));
+                .andExpect(jsonPath("$.name").value("John Doe"));
 
         verify(employeeService, times(1)).getEmployeeById(employeeId);
     }
@@ -90,12 +86,10 @@ class EmployeeControllerTest {
         Employee employee1 = new Employee();
         employee1.setId("1");
         employee1.setName("John Doe");
-        employee1.setContactInformation("john.doe@example.com");
 
         Employee employee2 = new Employee();
         employee2.setId("2");
         employee2.setName("Jane Smith");
-        employee2.setContactInformation("jane.smith@example.com");
 
         List<Employee> employees = Arrays.asList(employee1, employee2);
 
@@ -120,11 +114,9 @@ class EmployeeControllerTest {
         Employee existingEmployee = new Employee();
         existingEmployee.setId(employeeId);
         existingEmployee.setName("John Doe");
-        existingEmployee.setContactInformation("john.doe@example.com");
 
         Employee updatedEmployee = new Employee();
         updatedEmployee.setName("Updated Name");
-        updatedEmployee.setContactInformation("updated.email@example.com");
 
         when(employeeService.updateEmployee(eq(employeeId), any(Employee.class))).thenReturn(existingEmployee);
 
@@ -134,8 +126,7 @@ class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(employeeId))
-                .andExpect(jsonPath("$.name").value("John Doe")) // Expecting existing employee
-                .andExpect(jsonPath("$.contactInformation").value("john.doe@example.com")); // Expecting existing employee
+                .andExpect(jsonPath("$.name").value("John Doe")); // Expecting existing employee
 
         verify(employeeService, times(1)).updateEmployee(eq(employeeId), any(Employee.class));
     }
@@ -145,7 +136,6 @@ class EmployeeControllerTest {
         String employeeId = "3";
         Employee updatedEmployee = new Employee();
         updatedEmployee.setName("Updated Name");
-        updatedEmployee.setContactInformation("updated.email@example.com");
 
         when(employeeService.updateEmployee(eq(employeeId), any(Employee.class))).thenThrow(new IllegalArgumentException("Employee not found"));
 

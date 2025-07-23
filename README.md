@@ -35,3 +35,30 @@ The following core dependencies were automatically included to support these req
 <!-- AI-SUMMARY-END -->
 
 # employemanagementsystem
+
+---
+**Date:** 2025-07-24 03:07:45
+**Branch:** feature/AG-13_20250724030720
+---
+
+## 📝 Project Summary
+
+Feature: Employee search by name.
+Input: Employee name (string).
+Output: Employee details matching the provided name.
+Constraints: None explicitly stated.
+Logic:
+1. Coordinator enters an employee name.
+2. The system searches the database for employees matching the given name.
+3. The system displays the details of the found employee(s).
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springframework.boot:spring-boot-devtools`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
+
+--- END ---
