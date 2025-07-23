@@ -35,3 +35,35 @@ The following core dependencies were automatically included to support these req
 <!-- AI-SUMMARY-END -->
 
 # employemanagementsystem
+
+---
+**Date:** 2025-07-24 02:08:52
+**Branch:** feature/AG-13_20250724020839
+---
+
+## 📝 Project Summary
+
+Feature: Employee Search by Name
+Input: Employee name (string).
+Output: Employee details matching the provided name.
+Constraints:
+*   Java 21 and Spring Boot 3.5.* must be used.
+*   Layered architecture (Controller, Service, Repository) must be followed.
+*   Maven must be used for build.
+*   Data must be stored in a MongoDB database.
+*   API documentation must be provided using Swagger/OpenAPI.
+*   Unit and integration tests must be written using JUnit and Mockito.
+*   Dockerfile must be provided for containerization.
+*   GitHub Actions CI workflow must be included for build, test, and Docker image creation.
+Logic: The system should retrieve employee details from the database based on the provided name and display the results to the coordinator.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
+- `org.projectlombok:lombok:optional`
+- `org.springframework.boot:spring-boot-devtools:runtime`
+
+--- END ---
