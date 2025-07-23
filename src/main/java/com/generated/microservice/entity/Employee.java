@@ -15,6 +15,7 @@ public class Employee {
     @NotBlank(message = "Name is required")
     private String name;
 
-    private String contactInformation;
+    private String role;
 
+    private String department;
 }
