@@ -1,0 +1,4 @@
+- Initial version of the SRS.
+- Added feature: "Add new employee".
+- Added non-functional requirements, including technology stack (Java 21, Spring Boot 3.5, MongoDB), architecture, build tool (Maven), API documentation (Swagger/OpenAPI), testing frameworks (JUnit, Mockito), containerization (Dockerfile), and CI workflow (GitHub Actions).
+- Added GitHub repository details (URL, branch, and repository name).
