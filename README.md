@@ -35,3 +35,35 @@ The following core dependencies were automatically included to support these req
 <!-- AI-SUMMARY-END -->
 
 # employemanagementsystem
+
+---
+**Date:** 2025-07-24 18:11:58
+**Branch:** feature/AG-14_20250724181143
+---
+
+## 📝 Project Summary
+
+Feature: Employee search by photo.
+Input: Photo of an employee.
+Output: List of employees matching the provided photo (or the closest match if an exact match is not available).
+Constraints:
+*   Written in Java 21 using Spring Boot 3.5.*
+*   Layered architecture (Controller, Service, Repository)
+*   Maven build
+*   MongoDB database
+*   Swagger/OpenAPI documentation
+*   JUnit and Mockito for unit and integration tests
+*   Dockerfile for containerization
+*   GitHub Actions CI workflow (build, test, Docker image creation)
+Logic: Implement an endpoint that accepts a photo as input. Process the photo to identify potential employee matches from the database. Return a list of employees (or the closest match) as the output.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springframework.boot:spring-boot-devtools:runtime`
+
+--- END ---
