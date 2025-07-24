@@ -35,3 +35,27 @@ The following core dependencies were automatically included to support these req
 <!-- AI-SUMMARY-END -->
 
 # employemanagementsystem
+
+---
+**Date:** 2025-07-24 17:45:00
+**Branch:** feature/AG-13_20250724174443
+---
+
+## 📝 Project Summary
+
+Feature: Employee search by name.
+Input: Employee name (string).
+Output: Employee details matching the name.
+Constraints: Coordinator role required. Data must be stored in a MongoDB database. API documentation must be available via Swagger/OpenAPI.
+Logic: Implement a search function that retrieves employee details from the database based on the provided name. The function should be accessible to users with the coordinator role.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springframework.boot:spring-boot-devtools`
+
+--- END ---
