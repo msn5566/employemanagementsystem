@@ -128,4 +128,23 @@ class EmployeeServiceTest {
 
         verify(employeeRepository, times(1)).deleteById(employeeId);
     }
+
+    @Test
+    void findEmployeesByName_shouldReturnMatchingEmployees() {
+        // Arrange
+        String name = "test";
+        Employee employee1 = new Employee();
+        employee1.setName("test1");
+        Employee employee2 = new Employee();
+        employee2.setName("test2");
+        List<Employee> expectedEmployees = Arrays.asList(employee1, employee2);
+
+        when(employeeRepository.findByNameContainingIgnoreCase(name)).thenReturn(expectedEmployees);
+
+        // Act
+        List<Employee> actualEmployees = employeeService.findEmployeesByName(name);
+
+        // Assert
+        assertEquals(expectedEmployees, actualEmployees);
+    }
 }

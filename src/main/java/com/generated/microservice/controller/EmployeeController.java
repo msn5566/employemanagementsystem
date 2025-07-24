@@ -77,4 +77,9 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Employee>> searchEmployeesByName(@RequestParam String name) {
+        return ResponseEntity.ok(employeeService.findEmployeesByName(name));
+    }
 }

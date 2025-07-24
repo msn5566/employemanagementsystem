@@ -168,4 +168,23 @@ class EmployeeControllerTest {
 
         verify(employeeService, times(1)).deleteEmployee(employeeId);
     }
+
+    @Test
+    void searchEmployeesByName_shouldReturnOkAndMatchingEmployees() throws Exception {
+        // Arrange
+        String name = "test";
+        Employee employee1 = new Employee();
+        employee1.setName("test1");
+        Employee employee2 = new Employee();
+        employee2.setName("test2");
+        List<Employee> expectedEmployees = Arrays.asList(employee1, employee2);
+
+        when(employeeService.findEmployeesByName(name)).thenReturn(expectedEmployees);
+
+        // Act & Assert
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/search?name=" + name)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
 }
