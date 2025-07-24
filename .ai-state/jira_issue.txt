@@ -20,3 +20,32 @@ Non-Functional Requirements
 GitHub-URL: [https://github.com/msn5566/employemanagementsystem|https://github.com/msn5566/employemanagementsystem|smart-link] 
 checkout_branch: development
 Repository-Name: employemanagementsystem
+
+---
+**Date:** 2025-07-24 17:24:51
+**Branch:** feature/AG-14_20250724172432
+---
+
+Feature: Search employee by photo
+
+As a user, I want to search employees using their photo so that visual identification is possible.
+
+
+
+Non-Functional Requirements
+
+* Must be written in Java 21 using Spring Boot 3.5.*
+* Should follow layered architecture (Controller, Service, Repository).
+* Must use Maven for build.
+* Data should be stored in a Mongodb database.
+* Should provide API documentation using Swagger/OpenAPI.
+* Unit and integration tests must be written using JUnit and Mockito.
+* Must provide Dockerfile for containerization.
+* Should include GitHub Actions CI workflow for build, test, and Docker image creation.
+
+ 
+
+GitHub-URL: [https://github.com/msn5566/employemanagementsystem|https://github.com/msn5566/employemanagementsystem|smart-link] 
+checkout_branch: development
+Repository-Name: employemanagementsystem
+--- END ---
