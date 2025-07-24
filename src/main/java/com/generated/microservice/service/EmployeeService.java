@@ -4,7 +4,10 @@ import com.generated.microservice.entity.Employee;
 import com.generated.microservice.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,5 +41,16 @@ public class EmployeeService {
 
     public void deleteEmployee(String id) {
         employeeRepository.deleteById(id);
+    }
+
+    public List<Employee> findEmployeesByPhoto(MultipartFile photo) throws IOException {
+        // This is a placeholder.  A real implementation would:
+        // 1. Process the image (e.g., extract features, compare to existing employee photos)
+        // 2. Query the database based on the processed image data.
+
+        //For now, this will use ContactInformation, but this is a simplification
+        //and assumes the photo data, or a hash, is stored there.
+        String photoData = new String(photo.getBytes());
+        return employeeRepository.findByContactInformation(photoData);
     }
 }

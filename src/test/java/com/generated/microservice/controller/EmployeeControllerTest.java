@@ -5,13 +5,17 @@ import com.generated.microservice.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +23,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(EmployeeController.class)
 class EmployeeControllerTest {
@@ -167,5 +173,20 @@ class EmployeeControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(employeeService, times(1)).deleteEmployee(employeeId);
+    }
+
+    @Test
+    public void testSearchEmployeesByPhoto() throws Exception {
+        MockMultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        Employee employee = new Employee();
+        employee.setId("1");
+        employee.setName("Test Employee");
+        List<Employee> employees = Collections.singletonList(employee);
+
+        when(employeeService.findEmployeesByPhoto(any())).thenReturn(employees);
+
+        mockMvc.perform(multipart("/api/employees/searchByPhoto")
+                        .file(photo))
+                .andExpect(status().isOk());
     }
 }

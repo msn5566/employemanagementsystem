@@ -8,13 +8,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
@@ -127,5 +132,21 @@ class EmployeeServiceTest {
         employeeService.deleteEmployee(employeeId);
 
         verify(employeeRepository, times(1)).deleteById(employeeId);
+    }
+
+    @Test
+    public void testFindEmployeesByPhoto() throws IOException {
+        MockMultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        Employee employee = new Employee();
+        employee.setId("1");
+        employee.setName("Test Employee");
+        employee.setContactInformation("test data");
+        List<Employee> expectedEmployees = Collections.singletonList(employee);
+
+        when(employeeRepository.findByContactInformation(anyString())).thenReturn(expectedEmployees);
+
+        List<Employee> actualEmployees = employeeService.findEmployeesByPhoto(photo);
+
+        assertEquals(expectedEmployees, actualEmployees);
     }
 }

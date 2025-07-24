@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,5 +78,15 @@ public class EmployeeController {
     public ResponseEntity<Void> deleteEmployee(@PathVariable String id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/searchByPhoto")
+    public ResponseEntity<List<Employee>> searchEmployeesByPhoto(@RequestParam("photo") MultipartFile photo) {
+        try {
+            List<Employee> employees = employeeService.findEmployeesByPhoto(photo);
+            return new ResponseEntity<>(employees, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
