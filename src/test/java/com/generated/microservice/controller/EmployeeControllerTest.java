@@ -19,9 +19,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.Matchers.containsString;
 
 @WebMvcTest(EmployeeController.class)
-class EmployeeControllerTest {
+public class EmployeeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -167,5 +169,37 @@ class EmployeeControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(employeeService, times(1)).deleteEmployee(employeeId);
+    }
+
+    @Test
+    void searchEmployeesByName_ReturnsEmployees() throws Exception {
+        Employee employee1 = new Employee();
+        employee1.setId("1");
+        employee1.setName("John Doe");
+        employee1.setContactInformation("john.doe@example.com");
+
+        Employee employee2 = new Employee();
+        employee2.setId("2");
+        employee2.setName("John Smith");
+        employee2.setContactInformation("john.smith@example.com");
+
+        List<Employee> employees = Arrays.asList(employee1, employee2);
+        when(employeeService.findEmployeesByName("John")).thenReturn(employees);
+
+        mockMvc.perform(get("/api/employees/search?name=John")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("John Doe")))
+                .andExpect(content().string(containsString("John Smith")));
+    }
+
+    @Test
+    void searchEmployeesByName_NoEmployeesFound() throws Exception {
+        when(employeeService.findEmployeesByName("NonExistingName")).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/employees/search?name=NonExistingName")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
     }
 }

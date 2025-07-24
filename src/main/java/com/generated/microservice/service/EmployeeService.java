@@ -39,4 +39,8 @@ public class EmployeeService {
     public void deleteEmployee(String id) {
         employeeRepository.deleteById(id);
     }
+
+    public List<Employee> findEmployeesByName(String name) {
+        return employeeRepository.findByName(name);
+    }
 }

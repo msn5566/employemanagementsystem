@@ -128,4 +128,33 @@ class EmployeeServiceTest {
 
         verify(employeeRepository, times(1)).deleteById(employeeId);
     }
+
+    @Test
+    void findEmployeesByName_ReturnsEmployees() {
+        Employee employee1 = new Employee();
+        employee1.setId("1");
+        employee1.setName("John Doe");
+        employee1.setContactInformation("john.doe@example.com");
+
+        Employee employee2 = new Employee();
+        employee2.setId("2");
+        employee2.setName("John Smith");
+        employee2.setContactInformation("john.smith@example.com");
+
+        List<Employee> expectedEmployees = Arrays.asList(employee1, employee2);
+        when(employeeRepository.findByName("John")).thenReturn(expectedEmployees);
+
+        List<Employee> actualEmployees = employeeService.findEmployeesByName("John");
+
+        assertEquals(expectedEmployees, actualEmployees);
+    }
+
+    @Test
+    void findEmployeesByName_NoEmployeesFound() {
+        when(employeeRepository.findByName("NonExistingName")).thenReturn(List.of());
+
+        List<Employee> actualEmployees = employeeService.findEmployeesByName("NonExistingName");
+
+        assertEquals(0, actualEmployees.size());
+    }
 }
