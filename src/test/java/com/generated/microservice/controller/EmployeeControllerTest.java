@@ -1,6 +1,6 @@
 package com.generated.microservice.controller;
 
-import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.entity.Employee;
 import com.generated.microservice.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,12 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeControllerTest {
+public class EmployeeControllerTest {
 
     @Mock
     private EmployeeService employeeService;
@@ -34,19 +36,33 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void addEmployee_ValidInput_ReturnsCreated() {
+    void searchEmployeesByName_shouldReturnOkAndListOfEmployees() {
         // Arrange
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setName("John Doe");
-        employeeDTO.setContactInformation("john.doe@example.com");
-        String employeeId = "123e4567-e89b-12d3-a456-426614174000";
-        when(employeeService.addEmployee(any(EmployeeDTO.class))).thenReturn(employeeId);
+        String name = "testName";
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee());
+        when(employeeService.findEmployeesByName(name)).thenReturn(employees);
 
         // Act
-        ResponseEntity<String> responseEntity = employeeController.addEmployee(employeeDTO);
+        ResponseEntity<List<Employee>> response = employeeController.searchEmployeesByName(name);
 
         // Assert
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals("Employee added successfully with ID: " + employeeId, responseEntity.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(employees, response.getBody());
+    }
+
+    @Test
+    void searchEmployeesByName_shouldReturnOkAndEmptyListIfNoEmployeesFound() {
+        // Arrange
+        String name = "nonExistingName";
+        List<Employee> employees = new ArrayList<>();
+        when(employeeService.findEmployeesByName(name)).thenReturn(employees);
+
+        // Act
+        ResponseEntity<List<Employee>> response = employeeController.searchEmployeesByName(name);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(employees, response.getBody());
     }
 }
