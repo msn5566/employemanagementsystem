@@ -1,33 +1,27 @@
-package com.generated.microservice.service;
+package com.generated.microservice.repository;
 
 import com.generated.microservice.entity.Employee;
-import com.generated.microservice.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
-class EmployeeServiceImplTest {
+class EmployeeRepositoryTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
 
-    @InjectMocks
-    private EmployeeServiceImpl employeeService;
-
     @Test
-    void findEmployeesByPhoto_shouldReturnListOfEmployees() {
+    void findByPhoto_shouldReturnListOfEmployees() {
         // Arrange
         String photo = "test_photo.jpg";
         Employee employee = new Employee();
@@ -38,20 +32,20 @@ class EmployeeServiceImplTest {
         Mockito.when(employeeRepository.findByPhoto(photo)).thenReturn(expectedEmployees);
 
         // Act
-        List<Employee> actualEmployees = employeeService.findEmployeesByPhoto(photo);
+        List<Employee> actualEmployees = employeeRepository.findByPhoto(photo);
 
         // Assert
         assertEquals(expectedEmployees, actualEmployees);
     }
 
     @Test
-    void findEmployeesByPhoto_shouldReturnEmptyList_whenNoEmployeesFound() {
+    void findByPhoto_shouldReturnEmptyList_whenNoEmployeesFound() {
         // Arrange
         String photo = "nonexistent_photo.jpg";
         Mockito.when(employeeRepository.findByPhoto(photo)).thenReturn(Collections.emptyList());
 
         // Act
-        List<Employee> actualEmployees = employeeService.findEmployeesByPhoto(photo);
+        List<Employee> actualEmployees = employeeRepository.findByPhoto(photo);
 
         // Assert
         assertEquals(Collections.emptyList(), actualEmployees);

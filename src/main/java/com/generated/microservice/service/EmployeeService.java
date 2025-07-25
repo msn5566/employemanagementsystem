@@ -1,9 +1,10 @@
 package com.generated.microservice.service;
 
-import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.entity.Employee;
+
+import java.util.List;
 
 public interface EmployeeService {
-
-    String addEmployee(EmployeeDTO employeeDTO);
-
+    // Service method to find employees by photo
+    List<Employee> findEmployeesByPhoto(String photo);
 }
