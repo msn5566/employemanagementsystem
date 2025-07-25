@@ -36,3 +36,36 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-07-25 13:06:36
+**Branch:** feature/AG-14_20250725130606
+---
+
+## 📝 Project Summary
+
+Feature: Employee photo search
+Input: Employee photo
+Output: List of employees matching the photo
+Constraints:
+* Must be written in Java 21 using Spring Boot 3.5.*
+* Should follow layered architecture (Controller, Service, Repository).
+* Must use Maven for build.
+* Data should be stored in a Mongodb database.
+* Should provide API documentation using Swagger/OpenAPI.
+* Unit and integration tests must be written using JUnit and Mockito.
+* Must provide Dockerfile for containerization.
+* Should include GitHub Actions CI workflow for build, test, and Docker image creation.
+Logic: Implement a mechanism to compare the input photo against stored employee photos and return a list of employees whose photos match.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.mockito:mockito-core`
+- `org.projectlombok:lombok:1.18.30:optional`
+
+--- END ---

@@ -1,23 +1,29 @@
 package com.generated.microservice.service;
 
-import com.generated.microservice.dto.EmployeeDTO;
 import com.generated.microservice.entity.Employee;
 import com.generated.microservice.repository.EmployeeRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeServiceImplTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeServiceImplTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -25,26 +31,35 @@ class EmployeeServiceImplTest {
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
-    @Test
-    void addEmployee_ValidInput_ReturnsEmployeeId() {
-        // Arrange
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setName("John Doe");
-        employeeDTO.setContactInformation("john.doe@example.com");
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-        ArgumentCaptor<Employee> employeeCaptor = ArgumentCaptor.forClass(Employee.class);
-        when(employeeRepository.save(employeeCaptor.capture())).thenAnswer(invocation -> invocation.getArgument(0));
+    @Test
+    void findEmployeesByPhoto_returnsEmptyList() throws IOException {
+        // Arrange
+        MultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        List<Employee> allEmployees = new ArrayList<>();
+        when(employeeRepository.findAll()).thenReturn(allEmployees);
 
         // Act
-        String employeeId = employeeService.addEmployee(employeeDTO);
+        List<Employee> employees = employeeService.findEmployeesByPhoto(photo);
 
         // Assert
-        assertNotNull(employeeId);
-        verify(employeeRepository, times(1)).save(employeeCaptor.capture());
-        Employee savedEmployee = employeeCaptor.getValue();
+        assertEquals(0, employees.size());
+    }
 
-        assertEquals("John Doe", savedEmployee.getName());
-        assertEquals("john.doe@example.com", savedEmployee.getContactInformation());
-        assertEquals(employeeId, savedEmployee.getEmployeeId());
+    @Test
+    void findEmployeesByPhoto_IOException_returnsEmptyList() throws IOException {
+        // Arrange
+        MultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        when(employeeRepository.findAll()).thenThrow(new RuntimeException("Simulated IOException"));
+
+        // Act
+        List<Employee> employees = employeeService.findEmployeesByPhoto(photo);
+
+        // Assert
+        assertEquals(0, employees.size());
     }
 }

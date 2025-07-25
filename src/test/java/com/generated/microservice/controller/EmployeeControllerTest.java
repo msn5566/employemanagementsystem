@@ -1,24 +1,30 @@
 package com.generated.microservice.controller;
 
-import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.entity.Employee;
 import com.generated.microservice.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeControllerTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeControllerTest {
 
     @Mock
     private EmployeeService employeeService;
@@ -26,27 +32,43 @@ class EmployeeControllerTest {
     @InjectMocks
     private EmployeeController employeeController;
 
-    private MockMvc mockMvc;
-
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void addEmployee_ValidInput_ReturnsCreated() {
+    void searchEmployeesByPhoto_returnsOkAndEmployeeList() {
         // Arrange
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setName("John Doe");
-        employeeDTO.setContactInformation("john.doe@example.com");
-        String employeeId = "123e4567-e89b-12d3-a456-426614174000";
-        when(employeeService.addEmployee(any(EmployeeDTO.class))).thenReturn(employeeId);
+        MultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        List<Employee> expectedEmployees = new ArrayList<>();
+        Employee employee1 = new Employee();
+        employee1.setId("1");
+        expectedEmployees.add(employee1);
+
+        when(employeeService.findEmployeesByPhoto(photo)).thenReturn(expectedEmployees);
 
         // Act
-        ResponseEntity<String> responseEntity = employeeController.addEmployee(employeeDTO);
+        ResponseEntity<List<Employee>> responseEntity = employeeController.searchEmployeesByPhoto(photo);
 
         // Assert
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals("Employee added successfully with ID: " + employeeId, responseEntity.getBody());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedEmployees, responseEntity.getBody());
+    }
+
+    @Test
+    void searchEmployeesByPhoto_returnsOkAndEmptyList() {
+        // Arrange
+        MultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        List<Employee> expectedEmployees = new ArrayList<>();
+
+        when(employeeService.findEmployeesByPhoto(photo)).thenReturn(expectedEmployees);
+
+        // Act
+        ResponseEntity<List<Employee>> responseEntity = employeeController.searchEmployeesByPhoto(photo);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedEmployees, responseEntity.getBody());
     }
 }
