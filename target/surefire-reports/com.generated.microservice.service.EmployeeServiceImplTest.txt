@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+Test set: com.generated.microservice.service.EmployeeServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.413 s <<< FAILURE! -- in com.generated.microservice.service.EmployeeServiceImplTest
+com.generated.microservice.service.EmployeeServiceImplTest.testFindEmployeesByPhoto -- Time elapsed: 0.402 s <<< ERROR!
+org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
+
+Unnecessary stubbings detected.
+Clean & maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -> at com.generated.microservice.service.EmployeeServiceImplTest.testFindEmployeesByPhoto(EmployeeServiceImplTest.java:36)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+	at org.mockito.junit.jupiter.MockitoExtension.lambda$afterEach$2(MockitoExtension.java:200)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:198)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

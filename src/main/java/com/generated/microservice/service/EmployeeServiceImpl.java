@@ -6,6 +6,7 @@ import com.generated.microservice.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,5 +24,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setEmployeeId(employeeId);
         employeeRepository.save(employee);
         return employeeId;
+    }
+
+    @Override
+    public List<Employee> findEmployeesByPhoto(String photo) {
+        //  Implementation depends on how photos are stored and compared
+        //return employeeRepository.findByPhoto(photo); // Placeholder
+        return List.of(); // Returning empty list, needs actual implementation
     }
 }

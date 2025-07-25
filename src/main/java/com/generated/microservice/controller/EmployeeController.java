@@ -1,15 +1,17 @@
 package com.generated.microservice.controller;
 
 import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.entity.Employee;
 import com.generated.microservice.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
@@ -22,5 +24,14 @@ public class EmployeeController {
     public ResponseEntity<String> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         String employeeId = employeeService.addEmployee(employeeDTO);
         return new ResponseEntity<>("Employee added successfully with ID: " + employeeId, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/searchByPhoto")
+    public ResponseEntity<List<Employee>> searchEmployeesByPhoto(@RequestParam("photo") MultipartFile photo) throws IOException {
+        //Need implementation for reading photo data
+        //String photoData = new String(photo.getBytes()); //Example implementation
+        String photoData = photo.getOriginalFilename(); //Passing filename to service layer
+        List<Employee> employees = employeeService.findEmployeesByPhoto(photoData);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }
