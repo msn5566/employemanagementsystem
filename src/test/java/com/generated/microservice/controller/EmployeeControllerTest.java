@@ -7,18 +7,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Collections;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeControllerTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeControllerTest {
 
     @Mock
     private EmployeeService employeeService;
@@ -30,23 +40,50 @@ class EmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
     }
 
     @Test
-    void addEmployee_ValidInput_ReturnsCreated() {
-        // Arrange
+    void searchEmployeesByPhoto_ValidPhoto_ReturnsOk() throws Exception {
+        MockMultipartFile photo = new MockMultipartFile("photo", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test image content".getBytes());
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName("John Doe");
-        employeeDTO.setContactInformation("john.doe@example.com");
-        String employeeId = "123e4567-e89b-12d3-a456-426614174000";
-        when(employeeService.addEmployee(any(EmployeeDTO.class))).thenReturn(employeeId);
+        List<EmployeeDTO> employeeList = Collections.singletonList(employeeDTO);
 
-        // Act
-        ResponseEntity<String> responseEntity = employeeController.addEmployee(employeeDTO);
+        when(employeeService.findEmployeesByPhoto(any())).thenReturn(employeeList);
 
-        // Assert
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals("Employee added successfully with ID: " + employeeId, responseEntity.getBody());
+        mockMvc.perform(multipart("/employees/searchByPhoto")
+                .file(photo)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].name").value("John Doe"));
+    }
+
+    @Test
+    void searchEmployeesByPhoto_NoMatches_ReturnsOkWithEmptyList() throws Exception {
+        MockMultipartFile photo = new MockMultipartFile("photo", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test image content".getBytes());
+
+        when(employeeService.findEmployeesByPhoto(any())).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(multipart("/employees/searchByPhoto")
+                        .file(photo)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    void searchEmployeesByPhoto_ServiceThrowsException_ReturnsInternalServerError() throws Exception {
+        MockMultipartFile photo = new MockMultipartFile("photo", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test image content".getBytes());
+
+        when(employeeService.findEmployeesByPhoto(any())).thenThrow(new RuntimeException("Service error"));
+
+        mockMvc.perform(multipart("/employees/searchByPhoto")
+                        .file(photo)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isInternalServerError());
     }
 }

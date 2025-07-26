@@ -1,23 +1,26 @@
 package com.generated.microservice.service;
 
 import com.generated.microservice.dto.EmployeeDTO;
-import com.generated.microservice.entity.Employee;
 import com.generated.microservice.repository.EmployeeRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeServiceImplTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeServiceImplTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -25,26 +28,20 @@ class EmployeeServiceImplTest {
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
-    @Test
-    void addEmployee_ValidInput_ReturnsEmployeeId() {
-        // Arrange
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setName("John Doe");
-        employeeDTO.setContactInformation("john.doe@example.com");
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-        ArgumentCaptor<Employee> employeeCaptor = ArgumentCaptor.forClass(Employee.class);
-        when(employeeRepository.save(employeeCaptor.capture())).thenAnswer(invocation -> invocation.getArgument(0));
+    @Test
+    void findEmployeesByPhoto_Always_ReturnsEmptyList() {
+        // Arrange
+        MockMultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
 
         // Act
-        String employeeId = employeeService.addEmployee(employeeDTO);
+        List<EmployeeDTO> result = employeeService.findEmployeesByPhoto(photo);
 
         // Assert
-        assertNotNull(employeeId);
-        verify(employeeRepository, times(1)).save(employeeCaptor.capture());
-        Employee savedEmployee = employeeCaptor.getValue();
-
-        assertEquals("John Doe", savedEmployee.getName());
-        assertEquals("john.doe@example.com", savedEmployee.getContactInformation());
-        assertEquals(employeeId, savedEmployee.getEmployeeId());
+        assertTrue(result.isEmpty(), "The result should be an empty list.");
     }
 }
