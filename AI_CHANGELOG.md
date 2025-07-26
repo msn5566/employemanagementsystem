@@ -18,3 +18,14 @@
     - GitHub Actions CI workflow
 - Provided GitHub repository URL, branch, and name.
 --- END ---
+
+
+---
+**Date:** 2025-07-27 01:16:38
+**Branch:** feature/AG-14_20250727011611
+---
+
+- Added: Feature to search employees by photo.
+- Added: Non-functional requirements including Java 21, Spring Boot, layered architecture, Maven, MongoDB, Swagger/OpenAPI, JUnit, Mockito, Dockerfile, and GitHub Actions CI workflow.
+- Added: GitHub repository URL, checkout branch, and repository name.
+--- END ---

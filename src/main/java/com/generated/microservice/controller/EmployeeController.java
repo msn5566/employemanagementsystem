@@ -5,11 +5,13 @@ import com.generated.microservice.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import com.generated.microservice.model.Employee;
 
 @RestController
 @RequestMapping("/employees")
@@ -23,4 +25,11 @@ public class EmployeeController {
         String employeeId = employeeService.addEmployee(employeeDTO);
         return new ResponseEntity<>("Employee added successfully with ID: " + employeeId, HttpStatus.CREATED);
     }
+
+    @PostMapping(value = "/searchByPhoto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Employee>> searchEmployeesByPhoto(@RequestPart("photo") MultipartFile photo) {
+        List<Employee> employees = employeeService.findEmployeesByPhoto(photo);
+        return ResponseEntity.ok(employees);
+    }
 }
+```
