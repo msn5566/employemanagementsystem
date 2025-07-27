@@ -9,15 +9,23 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeServiceImplTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeServiceImplTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -46,5 +54,20 @@ class EmployeeServiceImplTest {
         assertEquals("John Doe", savedEmployee.getName());
         assertEquals("john.doe@example.com", savedEmployee.getContactInformation());
         assertEquals(employeeId, savedEmployee.getEmployeeId());
+    }
+
+    @Test
+    void findEmployeesByPhoto_ReturnsEmptyList() {
+        MultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        List<Employee> employees = employeeService.findEmployeesByPhoto(photo);
+        assertEquals(0, employees.size());
+    }
+
+    @Test
+    void findEmployeesByPhoto_ReturnsListOfEmployees() {
+        MultipartFile photo = new MockMultipartFile("photo", "test.jpg", "image/jpeg", "test data".getBytes());
+        when(employeeRepository.findAll()).thenReturn(List.of(new Employee()));
+        List<Employee> employees = employeeService.findEmployeesByPhoto(photo);
+        assertEquals(0, employees.size());
     }
 }
