@@ -36,3 +36,28 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-07-28 02:36:03
+**Branch:** feature/AG-15_20250728023536
+---
+
+## 📝 Project Summary
+
+Feature: Add employee reward functionality.
+Input: Employee ID, reward details (e.g., name, description, date).
+Output: Confirmation of reward creation associated with the specified employee.
+Constraints: Data must be stored in a MongoDB database. API documentation should be available via Swagger/OpenAPI.
+Logic: Implement a REST endpoint that allows a manager to create a reward for an employee. The endpoint should validate the input data and store the reward information in the database, linking it to the employee's profile. The implementation must be in Java 21, Spring Boot 3.5.*, using a layered architecture. Unit and integration tests are required. The project must be buildable with Maven and include a Dockerfile and GitHub Actions CI workflow.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test:test`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
+- `org.projectlombok:lombok:optional`
+- `org.springframework.boot:spring-boot-devtools:runtime`
+
+--- END ---
