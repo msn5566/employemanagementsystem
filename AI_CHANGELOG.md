@@ -18,3 +18,22 @@
     - GitHub Actions CI workflow
 - Provided GitHub repository URL, branch, and name.
 --- END ---
+
+
+---
+**Date:** 2025-07-28 01:51:07
+**Branch:** feature/AG-15_20250728015043
+---
+
+- Added feature to allow managers to add rewards to employee profiles.
+- Added non-functional requirements, including:
+    - Java 21 and Spring Boot 3.5.*
+    - Layered architecture
+    - Maven build
+    - MongoDB database
+    - Swagger/OpenAPI documentation
+    - JUnit and Mockito testing
+    - Dockerfile
+    - GitHub Actions CI workflow
+- Added GitHub repository details.
+--- END ---

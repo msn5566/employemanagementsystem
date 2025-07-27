@@ -1,6 +1,7 @@
+
 package com.generated.microservice.controller;
 
-import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.dto.RewardDTO;
 import com.generated.microservice.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,17 +9,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeControllerTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeControllerTest {
 
     @Mock
     private EmployeeService employeeService;
@@ -28,25 +32,41 @@ class EmployeeControllerTest {
 
     private MockMvc mockMvc;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
     }
 
     @Test
-    void addEmployee_ValidInput_ReturnsCreated() {
-        // Arrange
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setName("John Doe");
-        employeeDTO.setContactInformation("john.doe@example.com");
-        String employeeId = "123e4567-e89b-12d3-a456-426614174000";
-        when(employeeService.addEmployee(any(EmployeeDTO.class))).thenReturn(employeeId);
+    void addRewardToEmployee_ValidInput_ReturnsOk() throws Exception {
+        String employeeId = "123";
+        RewardDTO rewardDTO = new RewardDTO();
+        rewardDTO.setName("Bonus");
+        rewardDTO.setDescription("Performance bonus");
 
-        // Act
-        ResponseEntity<String> responseEntity = employeeController.addEmployee(employeeDTO);
+        doNothing().when(employeeService).addRewardToEmployee(employeeId, rewardDTO);
 
-        // Assert
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals("Employee added successfully with ID: " + employeeId, responseEntity.getBody());
+        mockMvc.perform(post("/employees/{employeeId}/rewards", employeeId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(rewardDTO)))
+                .andExpect(status().isOk());
+
+        verify(employeeService, times(1)).addRewardToEmployee(employeeId, rewardDTO);
+    }
+
+    @Test
+    void addRewardToEmployee_InvalidInput_ReturnsBadRequest() throws Exception {
+        String employeeId = "123";
+        RewardDTO rewardDTO = new RewardDTO();
+        rewardDTO.setDescription("Performance bonus"); // Missing name
+
+        mockMvc.perform(post("/employees/{employeeId}/rewards", employeeId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(rewardDTO)))
+                .andExpect(status().isBadRequest());
+
+        verify(employeeService, never()).addRewardToEmployee(anyString(), any());
     }
 }

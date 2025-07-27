@@ -1,11 +1,8 @@
+
 package com.generated.microservice.service;
 
-import com.generated.microservice.dto.EmployeeDTO;
 import com.generated.microservice.dto.RewardDTO;
 
-public interface EmployeeService {
-
-    String addEmployee(EmployeeDTO employeeDTO);
-
+public interface RewardService {
     void addRewardToEmployee(String employeeId, RewardDTO rewardDTO);
 }
