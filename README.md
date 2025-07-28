@@ -36,3 +36,29 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-07-29 02:07:56
+**Branch:** feature/AG-19_20250729020728
+---
+
+## 📝 Project Summary
+
+Feature: Export employee details to Excel for offline analysis.
+Input: Supervisor request to export employee details.
+Output: Excel file containing employee details.
+Constraints: Employee data is stored in MongoDB.
+Logic: Retrieve employee data from MongoDB and export it to an Excel file format.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.apache.poi:poi:5.2.5`
+- `org.apache.poi:poi-ooxml:5.2.5`
+- `org.projectlombok:lombok:optional`
+- `org.springframework.boot:spring-boot-devtools:runtime`
+- `org.springframework.boot:spring-boot-starter-test:test`
+
+--- END ---
