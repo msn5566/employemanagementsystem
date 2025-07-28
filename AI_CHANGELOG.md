@@ -18,3 +18,16 @@
     - GitHub Actions CI workflow
 - Provided GitHub repository URL, branch, and name.
 --- END ---
+
+
+---
+**Date:** 2025-07-29 02:17:06
+**Branch:** feature/AG-18_20250729021643
+---
+
+- Added: Feature to view materials per employee as an admin.
+- Added: Acceptance criteria - ability to audit items issued to a specific employee.
+- Added: GitHub repository URL.
+- Added: Development branch information.
+- Added: Repository name.
+--- END ---
