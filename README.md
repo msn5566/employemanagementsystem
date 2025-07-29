@@ -36,3 +36,37 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-07-29 16:28:48
+**Branch:** feature/AG-22_20250729162809
+---
+
+## 📝 Project Summary
+
+Feature: Data synchronization from external API to database.
+Input: OAuth authorized external API endpoint.
+Output: Data from the API stored as a list in the database.
+Constraints: The external API requires OAuth authorization.
+Logic:
+1. Authenticate with the external API using OAuth.
+2. Fetch data from the API endpoint.
+3. Transform the data into a list format.
+4. Store the list data into the database.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springframework.boot:spring-boot-devtools`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springframework.boot:spring-boot-starter-validation`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0`
+- `org.slf4j:slf4j-api`
+- `ch.qos.logback:logback-classic`
+- `org.springframework.boot:spring-boot-starter-oauth2-client`
+- `org.springframework.boot:spring-boot-starter-webflux`
+
+--- END ---
