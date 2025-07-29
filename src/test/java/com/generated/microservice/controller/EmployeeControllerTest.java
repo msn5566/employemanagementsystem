@@ -1,6 +1,7 @@
 package com.generated.microservice.controller;
 
 import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.dto.MaterialDTO;
 import com.generated.microservice.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,17 +9,28 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.hasSize;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeControllerTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeControllerTest {
 
     @Mock
     private EmployeeService employeeService;
@@ -48,5 +60,33 @@ class EmployeeControllerTest {
         // Assert
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals("Employee added successfully with ID: " + employeeId, responseEntity.getBody());
+    }
+
+    @Test
+    void getMaterialsByEmployeeId_ReturnsMaterials() throws Exception {
+        String employeeId = "123";
+        MaterialDTO materialDTO = new MaterialDTO();
+        materialDTO.setMaterialName("Laptop");
+        materialDTO.setIssueDate(LocalDate.now());
+        materialDTO.setDescription("Dell XPS 15");
+        List<MaterialDTO> materials = Collections.singletonList(materialDTO);
+
+        when(employeeService.getMaterialsByEmployeeId(employeeId)).thenReturn(materials);
+
+        mockMvc.perform(get("/employees/{employeeId}/materials", employeeId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].materialName").value("Laptop"))
+                .andExpect(jsonPath("$[0].description").value("Dell XPS 15"));
+    }
+
+    @Test
+    void getMaterialsByEmployeeId_ReturnsNoMaterials() throws Exception {
+        String employeeId = "456";
+        when(employeeService.getMaterialsByEmployeeId(employeeId)).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/employees/{employeeId}/materials", employeeId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }
