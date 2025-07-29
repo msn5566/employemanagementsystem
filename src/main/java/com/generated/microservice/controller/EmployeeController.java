@@ -2,6 +2,7 @@ package com.generated.microservice.controller;
 
 import com.generated.microservice.dto.EmployeeDTO;
 import com.generated.microservice.service.EmployeeService;
+import com.generated.microservice.service.MaterialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final MaterialService materialService;
 
     @PostMapping
     public ResponseEntity<String> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
