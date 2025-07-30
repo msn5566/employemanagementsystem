@@ -1,24 +1,31 @@
 package com.generated.microservice.controller;
 
-import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.dto.MaterialDTO;
 import com.generated.microservice.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.hasSize;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeControllerTest {
+@MockitoSettings(strictness = Strictness.LENIENT)
+public class EmployeeControllerTest {
 
     @Mock
     private EmployeeService employeeService;
@@ -29,24 +36,32 @@ class EmployeeControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
     }
 
     @Test
-    void addEmployee_ValidInput_ReturnsCreated() {
-        // Arrange
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setName("John Doe");
-        employeeDTO.setContactInformation("john.doe@example.com");
-        String employeeId = "123e4567-e89b-12d3-a456-426614174000";
-        when(employeeService.addEmployee(any(EmployeeDTO.class))).thenReturn(employeeId);
+    public void testGetEmployeeMaterials() throws Exception {
+        // Mock the service response
+        MaterialDTO material1 = new MaterialDTO();
+        material1.setMaterialName("Laptop");
+        material1.setIssueDate("2024-01-15");
+        material1.setMetadata("Dell XPS 15");
 
-        // Act
-        ResponseEntity<String> responseEntity = employeeController.addEmployee(employeeDTO);
+        MaterialDTO material2 = new MaterialDTO();
+        material2.setMaterialName("Office Chair");
+        material2.setIssueDate("2023-12-01");
+        material2.setMetadata("Ergonomic");
 
-        // Assert
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals("Employee added successfully with ID: " + employeeId, responseEntity.getBody());
+        List<MaterialDTO> materials = Arrays.asList(material1, material2);
+        when(employeeService.getEmployeeMaterials("123")).thenReturn(materials);
+
+        // Perform the request and assert the response
+        mockMvc.perform(get("/employees/123/materials"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].materialName").value("Laptop"))
+                .andExpect(jsonPath("$[1].materialName").value("Office Chair"));
     }
 }

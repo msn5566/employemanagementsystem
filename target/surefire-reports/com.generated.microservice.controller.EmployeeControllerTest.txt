@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+Test set: com.generated.microservice.controller.EmployeeControllerTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.606 s <<< FAILURE! -- in com.generated.microservice.controller.EmployeeControllerTest
+com.generated.microservice.controller.EmployeeControllerTest.testGetEmployeeMaterials -- Time elapsed: 2.574 s <<< FAILURE!
+java.lang.AssertionError: 
+JSON path "$"
+Expected: a collection with size <2>
+     but: collection size was <0>
+	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+	at org.springframework.test.util.JsonPathExpectationsHelper.assertValue(JsonPathExpectationsHelper.java:107)
+	at org.springframework.test.web.servlet.result.JsonPathResultMatchers.lambda$value$0(JsonPathResultMatchers.java:88)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+	at com.generated.microservice.controller.EmployeeControllerTest.testGetEmployeeMaterials(EmployeeControllerTest.java:63)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

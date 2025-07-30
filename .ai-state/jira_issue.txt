@@ -1,0 +1,19 @@
+
+
+---
+**Date:** 2025-07-30 13:12:18
+**Branch:** feature/AG-18_20250730131140
+---
+
+Feature: View materials per employee
+
+As an admin, I want to view a list of all materials issued to a specific employee so that I can audit items.
+
+
+
+
+
+GitHub-URL: [https://github.com/msn5566/employemanagementsystem|https://github.com/msn5566/employemanagementsystem|smart-link] 
+checkout_branch: development
+Repository-Name: employemanagementsystem
+--- END ---
