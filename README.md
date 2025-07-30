@@ -36,3 +36,31 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-07-30 19:13:26
+**Branch:** feature/AG-18_20250730191234
+---
+
+## 📝 Project Summary
+
+Feature: View materials issued to an employee
+Input: Employee identifier
+Output: List of all materials issued to the specified employee, including details such as item name, issue date, and any relevant notes.
+Constraints: Must be accessible only to users with admin privileges. Data should be presented in a clear and auditable format.
+Logic: Retrieve the employee's material issue history from the database and display it in a user-friendly manner.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springframework.boot:spring-boot-devtools`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springframework.boot:spring-boot-starter-validation`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0`
+- `org.slf4j:slf4j-api`
+- `ch.qos.logback:logback-classic`
+
+--- END ---
