@@ -1,0 +1,11 @@
+com\generated\microservice\config\ApplicationConfig.class
+com\generated\microservice\dto\ExternalEmployeeDTO.class
+com\generated\microservice\controller\EmployeeController.class
+com\generated\microservice\config\OAuth2ClientConfig.class
+com\generated\microservice\dto\EmployeeDTO.class
+com\generated\microservice\service\EmployeeServiceImpl.class
+com\generated\microservice\EmployeeManagementApplication.class
+com\generated\microservice\repository\EmployeeRepository.class
+com\generated\microservice\scheduler\DataSyncScheduler.class
+com\generated\microservice\entity\Employee.class
+com\generated\microservice\service\EmployeeService.class

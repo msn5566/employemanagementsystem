@@ -23,4 +23,9 @@ public class EmployeeController {
         String employeeId = employeeService.addEmployee(employeeDTO);
         return new ResponseEntity<>("Employee added successfully with ID: " + employeeId, HttpStatus.CREATED);
     }
+
+    @PostMapping("/sync")
+    public void syncData() {
+        employeeService.fetchDataAndSave();
+    }
 }
