@@ -1,6 +1,7 @@
 package com.generated.microservice.controller;
 
 import com.generated.microservice.dto.EmployeeDTO;
+import com.generated.microservice.service.DataSyncService;
 import com.generated.microservice.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final DataSyncService dataSyncService;
 
     @PostMapping
     public ResponseEntity<String> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         String employeeId = employeeService.addEmployee(employeeDTO);
         return new ResponseEntity<>("Employee added successfully with ID: " + employeeId, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/sync")
+    public void syncData() {
+        dataSyncService.syncEmployeeData();
     }
 }

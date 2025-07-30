@@ -1,0 +1,6 @@
+com\generated\microservice\service\EmployeeServiceImplTest.class
+com\generated\microservice\service\ExternalApiServiceImplTest.class
+com\generated\microservice\config\OAuthClientConfigTest.class
+com\generated\microservice\controller\EmployeeControllerTest.class
+com\generated\microservice\service\DataSyncServiceImplTest.class
+com\generated\microservice\config\OAuthClientConfigTest$1.class
