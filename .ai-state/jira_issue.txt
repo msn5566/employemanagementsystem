@@ -1,0 +1,19 @@
+
+
+---
+**Date:** 2025-07-30 21:18:53
+**Branch:** feature/AG-22_20250730211754
+---
+
+Feature: As admin , i want fetch the data from an external api as list and push the in my database
+
+As admin, I want to fetch the data from an external api as a list and push the data into my database.
+
+The external api secured with OAuth authorization.
+
+
+
+GitHub-URL: [https://github.com/msn5566/employemanagementsystem|https://github.com/msn5566/employemanagementsystem|smart-link] 
+checkout_branch: development
+Repository-Name: employemanagementsystem
+--- END ---
