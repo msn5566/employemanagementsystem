@@ -18,3 +18,19 @@
     - GitHub Actions CI workflow
 - Provided GitHub repository URL, branch, and name.
 --- END ---
+
+
+---
+**Date:** 2025-08-03 18:58:32
+**Branch:** feature/AG-18_20250803185759
+---
+
+- Initial version of the project.
+- Added feature to view materials per employee.
+- Allows clients to create a POJO from source.xml and expected_target.xml.
+- Data is mapped from source.xml to expected_target.xml using mapping_with_validation.csv.
+- Added GitHub repository details:
+    - URL: [https://github.com/msn5566/employemanagementsystem|https://github.com/msn5566/employemanagementsystem|smart-link]
+    - Checkout branch: development
+    - Repository Name: employemanagementsystem
+--- END ---
