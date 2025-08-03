@@ -1,0 +1,7 @@
+<employees>
+    <employee>
+        <id>123</id>
+        <name>John Doe</name>
+        <department>IT</department>
+    </employee>
+</employees>

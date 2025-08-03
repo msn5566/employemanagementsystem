@@ -1,0 +1,7 @@
+{
+  "mapping": {
+    "employeeId": "employee.id",
+    "employeeName": "employee.name",
+    "department": "employee.department"
+  }
+}
