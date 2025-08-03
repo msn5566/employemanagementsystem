@@ -36,3 +36,42 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-08-04 00:02:02
+**Branch:** feature/AG-18_20250804000127
+---
+
+## 📝 Project Summary
+
+Feature: Create POJO and map data between XML files.
+Input:
+  - source.xml
+  - expected_target.xml
+  - mapping_with_validation.json
+Output:
+  - POJO created based on the XML files.
+  - Data mapped from source.xml to expected_target.xml according to mapping_with_validation.json.
+Constraints:
+  - Use the provided GitHub repository: https://github.com/msn5566/employemanagementsystem
+  - Work on the 'development' branch.
+Logic:
+  - Create a POJO structure that reflects the data structure in source.xml and expected_target.xml.
+  - Implement data mapping from source.xml to expected_target.xml, guided by the rules defined in mapping_with_validation.json.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springframework.boot:spring-boot-devtools`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springframework.boot:spring-boot-starter-validation`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0`
+- `org.slf4j:slf4j-api`
+- `ch.qos.logback:logback-classic`
+- `com.fasterxml.jackson.dataformat:jackson-dataformat-xml`
+- `org.json:json:20240303`
+
+--- END ---
