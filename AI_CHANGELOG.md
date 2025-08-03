@@ -18,3 +18,14 @@
     - GitHub Actions CI workflow
 - Provided GitHub repository URL, branch, and name.
 --- END ---
+
+
+---
+**Date:** 2025-08-03 19:29:14
+**Branch:** feature/AG-18_20250803192838
+---
+
+- Initial version of the project.
+- Added feature to create a POJO from source.xml and expected_target.xml, mapping data based on mapping_with_validation.json.
+- Included GitHub repository URL, branch, and repository name.
+--- END ---

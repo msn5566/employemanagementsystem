@@ -1,0 +1,5 @@
+<target>
+    <employeeId>123</employeeId>
+    <employeeName>John Doe</employeeName>
+    <department>IT</department>
+</target>
