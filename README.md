@@ -36,3 +36,34 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-08-04 14:19:34
+**Branch:** feature/AG-18_20250804141808
+---
+
+## 📝 Project Summary
+
+Feature: View materials per employee
+Input: source.xml, expected_target.xml, mapping_with_validation.json
+Output: POJO with data mapped from source.xml to expected_target.xml based on mapping_with_validation.json
+Constraints: Must adhere to the mapping specified in mapping_with_validation.json.  Code should reside in the 'employemanagementsystem' repository on the 'development' branch.
+Logic: Create a POJO. Read data from source.xml. Map data to the POJO fields according to mapping_with_validation.json.  Compare the resulting POJO structure and data with expected_target.xml.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springframework.boot:spring-boot-devtools`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springframework.boot:spring-boot-starter-validation`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.11.0`
+- `org.slf4j:slf4j-api`
+- `ch.qos.logback:logback-classic`
+- `com.fasterxml.jackson.dataformat:jackson-dataformat-xml`
+- `com.fasterxml.jackson.core:jackson-databind`
+- `jakarta.validation:jakarta.validation-api`
+
+--- END ---
