@@ -36,3 +36,34 @@ Logic:
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:1.7.0`
 
 --- END ---
+
+
+---
+**Date:** 2025-08-04 10:43:50
+**Branch:** feature/AG-18_20250804104243
+---
+
+## 📝 Project Summary
+
+Feature: Create a POJO and map data from source XML to target XML.
+Input: source.xml, expected_target.xml, mapping_with_validation.json
+Output: POJO representing data from source.xml, mapped to the structure of expected_target.xml.
+Constraints: Must adhere to the mapping defined in mapping_with_validation.json.  Must use the provided GitHub repository (employemanagementsystem) and checkout the 'development' branch.
+Logic: Create a POJO based on the structure of expected_target.xml. Read data from source.xml.  Map data from source.xml to the POJO according to the rules specified in mapping_with_validation.json.
+
+### 🛠️ Core Dependencies
+
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-starter-data-mongodb`
+- `org.springframework.boot:spring-boot-starter-test`
+- `org.springframework.boot:spring-boot-devtools`
+- `org.projectlombok:lombok:1.18.30:optional`
+- `org.springframework.boot:spring-boot-starter-validation`
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0`
+- `org.slf4j:slf4j-api`
+- `ch.qos.logback:logback-classic`
+- `jakarta.xml.bind:jakarta.xml.bind-api`
+- `org.glassfish.jaxb:jaxb-runtime`
+- `com.fasterxml.jackson.dataformat:jackson-dataformat-xml`
+
+--- END ---
