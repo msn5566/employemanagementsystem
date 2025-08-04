@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://example.org/mapping"
+           xmlns:map="http://example.org/mapping"
+           elementFormDefault="qualified">
+
+    <xs:element name="mapping">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- Add elements for mapping definitions and validation rules here -->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
